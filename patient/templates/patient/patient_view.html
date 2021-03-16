@@ -1,0 +1,41 @@
+{% extends 'patient/base.html' %}
+{% block body %}
+
+    <div  class="row">
+        {% if patients %}
+        
+            {%for patient in patients  %}           
+                <div class="col-sm-6 col-md-4">
+                    <div class="card-body">
+                        <div class="box">
+                            <h3>{{patient.patient_fname}}</h3>
+                            <div class="container">
+                                <div class="row buttonBox">
+                                    <a href="#" class="btn btn-primary a-btn-slide-text btn-xs">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                        <span><strong>Add</strong></span>            
+                                    </a>
+                                    <a href="#" class="btn btn-primary a-btn-slide-text btn-xs">
+                                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                        <span><strong>Edit</strong></span>            
+                                    </a>
+                                    <a href="{{patient.id}}" class="btn btn-primary a-btn-slide-text btn-xs">
+                                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                        <span><strong>View</strong></span>            
+                                    </a>
+                                    <a href="#" class="btn btn-primary a-btn-slide-text btn-xs">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                        <span><strong>Delete</strong></span>            
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>           
+            {%endfor%}
+            
+        {% else %}
+            <h2>No patient record available!!!</h2>
+        {% endif %}
+    </div>
+{% endblock %}

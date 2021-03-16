@@ -1,0 +1,33 @@
+{% extends 'patient/base.html' %}
+{% block body %}
+    <div>
+        <h3>Patient Name: {{patient.patient_fname}}</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Ailment</th>
+                    <th>Age</th>
+                    <th>Report</th>
+                    <th>Size</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{patient.ailment}}</td>
+                    <td>{{patient.age}}</td>
+                    {% if patient.patient_report %}
+                        <td>{{patient.patient_report.name}}</td>
+                        <td>{{patient.patient_report.size}}</td>
+                        <td><a href="{{patient.patient_report.url}}" target="_blank">Reports</a></td>
+                    {% else %}
+                        <td>Not Available</td>
+                        <td>Not Available</td>
+                        <td>Not Available</td>
+                    {% endif %}
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+{% endblock %}
