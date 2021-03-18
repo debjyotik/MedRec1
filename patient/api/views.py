@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from patient.models import Patient
 
-from .serializer import PatientSerializer
+from .serializer import PatientSerializer, RegisterUserSerializer
 
 
 #Display all patient records or create a new patient record
@@ -65,9 +65,9 @@ def api_patient_delete(request, patient_id):
         return Response(data=data)
 
 #create one
-@api_view(['PUT',])
+@api_view(['POST',])
 def api_patient_create(request):
-    user = Users.objects.get(pk=1)
+    #user = User.objects.get(pk=1)
 
     patient = Patient()
 
@@ -79,3 +79,17 @@ def api_patient_create(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST',])
+def api_register_user(request):
+
+    if request.method == 'POST':
+        serializer = RegisterUserSerializer(data=request.data)
+        data = {}
+        if serializer.is_valid():
+            user = serializer.save()
+            data['response'] = "New patient registered! "
+        else:
+            data = serializer.errors
+        return Response(data)
