@@ -2,9 +2,26 @@ from django.db import models
 from django.urls import reverse
 from django import forms
 
+from django.contrib.auth.models import User
+
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+
+import mysql.connector
+
 # Create your models here.
 class Patient(models.Model):
-    patient_fname = models.CharField(max_length=255, verbose_name="First Name")
+
+    mysql_connection = mysql.connector.connect(host="localhost", user="root", passwd="Kolkata@1", database="patient_record_rest")
+
+    if mysql_connection.is_connected():
+        transaction = mysql_connection.cursor()
+        transaction.execute(" select Transaction_display_name from Transaction where Transaction_name ='{}' and Lang_code = {} ".format('patient_fname', 1, ))
+        patient_fname_verbose = str(transaction.fetchone()[0])
+
+    patient_fname = models.CharField(max_length=255, verbose_name=patient_fname_verbose)
     patient_lname = models.CharField(max_length=255, verbose_name="Last Name")
     age = models.FloatField(verbose_name="Age of Patient")
     #gender = models.CharField(max_length=1, verbose_name="Gender")
@@ -19,3 +36,8 @@ class Patient(models.Model):
 
     def __str__(self):
         return self.patient_fname + " : " + self.ailment
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_token_authorization(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)

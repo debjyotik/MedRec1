@@ -1,7 +1,10 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated, AllowAny
+
+from rest_framework.authtoken.models import Token
 
 from patient.models import Patient
 
@@ -18,8 +21,25 @@ class PatientList(APIView):
         return Response(serializer.data)
 '''
 
+@api_view(['POST',])
+@permission_classes((AllowAny,))
+def api_register_user(request):
+
+    if request.method == 'POST':
+        serializer = RegisterUserSerializer(data=request.data)
+        data = {}
+        if serializer.is_valid():
+            user = serializer.save()
+            data['response'] = "New patient registered! "
+            data['username'] = user.username
+            data['token'] = Token.objects.get(user=user).key
+        else:
+            data = serializer.errors
+        return Response(data)
+
 #view all
 @api_view(['GET',])
+@permission_classes((IsAuthenticated,))
 def api_patient_list(request):
     try:
         patient = Patient.objects.all()
@@ -32,11 +52,17 @@ def api_patient_list(request):
 
 #updare one
 @api_view(['PUT',])
+@permission_classes((IsAuthenticated,))
 def api_patient_update(request, patient_id):
     try:
         patient = Patient.objects.get(pk = patient_id)
     except Patient.DoesNotExist:
         return Response(status.HTTP_404_NOT_FOUND) 
+
+    user = request.user
+
+    if patient.user != user:
+        return Response('response', 'You dont have access to this page!!! ')
 
     if request.method == 'PUT':
         serializer = PatientSerializer(patient, data=request.data)
@@ -49,6 +75,7 @@ def api_patient_update(request, patient_id):
 
 #delete one
 @api_view(['DELETE',])
+@permission_classes((IsAuthenticated,))
 def api_patient_delete(request, patient_id):
     try:
         patient = Patient.objects.get(pk = patient_id)
@@ -66,6 +93,7 @@ def api_patient_delete(request, patient_id):
 
 #create one
 @api_view(['POST',])
+@permission_classes((IsAuthenticated,))
 def api_patient_create(request):
     #user = User.objects.get(pk=1)
 
@@ -79,17 +107,3 @@ def api_patient_create(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['POST',])
-def api_register_user(request):
-
-    if request.method == 'POST':
-        serializer = RegisterUserSerializer(data=request.data)
-        data = {}
-        if serializer.is_valid():
-            user = serializer.save()
-            data['response'] = "New patient registered! "
-        else:
-            data = serializer.errors
-        return Response(data)
