@@ -1,4 +1,6 @@
 from django.conf.urls import url
+from django.urls import include
+
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from . import views
@@ -6,7 +8,8 @@ from . import views
 app_name = 'patient'
 
 urlpatterns = [
-
+    
+    url(r'^accounts/', include('allauth.urls')),
     #/
     url(r'^$', views.index, name='index'),
 

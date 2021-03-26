@@ -1,3 +1,5 @@
+{% load socialaccount %}
+
 <!DOCTYPE html>
 <html>
     
@@ -67,6 +69,25 @@
 			outline: 0px !important;
 		}
 
+		.btn-google {
+    		color: #545454;
+    		background-color: #ffffff;
+    		box-shadow: 0 1px 2px 1px #ddd
+		}
+
+		.or-container {
+			align-items: center;
+			color: rgb(68, 60, 60);
+			display: flex;
+			margin: 25px 0
+		}
+
+		.line-separator {
+			background-color: rgb(68, 60, 60);;
+			flex-grow: 5;
+			height: 1px
+		}
+
 		#messages{
 			background-color: grey;
 			color: #fff;
@@ -81,8 +102,6 @@
 		<div class="d-flex justify-content-center h-100">
 			<div class="user_card">
 				<div class="d-flex justify-content-center">
-
-
 					<h3 id="form-title">LOGIN</h3>
 				</div>
 				<div class="d-flex justify-content-center form_container">
@@ -104,6 +123,17 @@
 							<div class="d-flex justify-content-center mt-3 login_container">
 				 				<input class="btn login_btn" type="submit" value="Login">
 				   			</div>
+							<div class="or-container">
+                                <div class="line-separator"></div>
+                                <div class="or-label">OR</div>
+                                <div class="line-separator"></div>
+                            </div>
+							<div class="row">
+                                <div class="col-md-12"> 
+									<a class="btn btn-lg btn-google btn-block text-uppercase btn-outline" href="{% provider_login_url 'google' %}"><img src="https://img.icons8.com/color/16/000000/google-logo.png"> Signup Using Google</a> 
+								</div>
+                            </div>
+							   
 					</form>
 
 				</div>

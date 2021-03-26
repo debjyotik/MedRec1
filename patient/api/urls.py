@@ -11,5 +11,6 @@ urlpatterns = [
     re_path(r'^patient/addjsn$', views.api_patient_create, name = 'patientcreatejason'),
     re_path(r'^patient/register$', views.api_register_user, name = 'patientregisterjason'),
     re_path(r'^patient/rest-auth/', include('rest_auth.urls')),
+    re_path(r'^patient/listjsnpage$', views.api_patient_list_page.as_view(), name='patientlistpage'),
     
 ]

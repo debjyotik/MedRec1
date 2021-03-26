@@ -1,5 +1,8 @@
 from rest_framework import serializers
 
+from rest_auth.serializers import TokenSerializer
+from django.contrib.auth import get_user_model
+
 from django.contrib.auth.models import User
 
 from patient.models import Patient
@@ -8,8 +11,21 @@ class PatientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Patient
-        #fields = ('patient_fname' , 'patient_lname' , 'age', 'gender', 'ailment', 'patient_report')
+        #fields = ('patient_fname' , 'patient_lname' , 'age', 'gender', 'ailment', 'patient_report', 'username')
         fields = '__all__'
+
+
+class UserTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('id', 'email', 'first_name', 'last_name', 'username', 'email')
+
+
+class CustomTokenSerializer(TokenSerializer):
+    user = UserTokenSerializer(read_only=True)
+
+    class Meta(TokenSerializer.Meta):
+        fields = ('key', 'user')
 
 
 class RegisterUserSerializer(serializers.ModelSerializer):
