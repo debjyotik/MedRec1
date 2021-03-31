@@ -25,7 +25,7 @@ SECRET_KEY = 'ksg*!p^&#k!gv$j2%m1xbk*v^e1lm1f)@b0u6s3&z(5hr*1q_w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','ec2-65-1-65-196.ap-south-1.compute.amazonaws.com']
 
 
 # Application definition
@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'django_google.apps.DjangoGoogleConfig',
+
 ]
 
 REST_FRAMEWORK = {

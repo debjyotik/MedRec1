@@ -30,6 +30,8 @@ class Patient(models.Model):
     #gender = forms.ChoiceField(widget=forms.RadioSelect)
     ailment = models.CharField(max_length=1000, verbose_name="Ailment")
     patient_report = models.FileField(blank=True)
+    patient_report_img = models.ImageField(blank=True, null=True)
+    patient_report_raw = models.BinaryField(blank=True, null=True, editable=True)
 
     def get_absolute_url(self):
         return reverse('patient:patientview')  #, kwargs={'pk': self.pk})

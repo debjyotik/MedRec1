@@ -1,6 +1,7 @@
 from django.urls import path, re_path, include
 
 from . import views
+from .views import GoogleSocialAuthView
 
 app_name = 'patient'
 
@@ -12,5 +13,6 @@ urlpatterns = [
     re_path(r'^patient/register$', views.api_register_user, name = 'patientregisterjason'),
     re_path(r'^patient/rest-auth/', include('rest_auth.urls')),
     re_path(r'^patient/listjsnpage$', views.api_patient_list_page.as_view(), name='patientlistpage'),
+    re_path(r'^patient/google/', GoogleSocialAuthView.as_view()),
     
 ]

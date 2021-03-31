@@ -1,7 +1,13 @@
 {% extends 'patient/base.html' %}
 {% block body %}
     <div>
-        <h3>Patient Name: {{patient.patient_fname}}</h3>
+        <h3>Patient Name: {{patient.patient_fname}}
+        {% if patient.patient_report_img %}
+            <div style="float: right; margin-right: 2%;">
+                <img src="{{patient.patient_report_img.url}}" alt="Patient image" width="100" height="100">
+            </div>
+        {% endif %}
+        </h3>
         <table class="table">
             <thead>
                 <tr>

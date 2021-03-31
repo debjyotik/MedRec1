@@ -72,4 +72,4 @@ def parientdetails(request, patient_id):
 @method_decorator(login_required, name='dispatch')
 class PatientCreate(CreateView):
     model = Patient
-    fields = ['patient_fname' , 'patient_lname' , 'age', 'gender', 'ailment', 'patient_report']    
+    fields = ['patient_fname' , 'patient_lname' , 'age', 'gender', 'ailment', 'patient_report', 'patient_report_img', 'patient_report_raw']    

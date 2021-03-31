@@ -7,6 +7,11 @@ from django.contrib.auth.models import User
 
 from patient.models import Patient
 
+from . import google
+from .register import register_social_user
+import os
+from rest_framework.exceptions import AuthenticationFailed
+
 class PatientSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -56,3 +61,23 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         new_user.set_password(password)
         new_user.save()
         return new_user
+
+class GoogleSocialAuthSerializer(serializers.Serializer):
+    auth_token = serializers.CharField()
+
+    def valid_auth_token(self, auth_token):
+        user_data = google.Google.validate(auth_token)
+        try:
+            user_data['sub']
+        except:
+            raise serializers.ValidationError({'This token is invalid or expired. Please login again! '})
+        
+        if user_data['aud'] != os.environment.get('GOOGLE_CLIENT_ID'):
+            raise AuthenticationFailed('Unknown user profile! ')
+        
+        user_id = user_data['sub']
+        email = user_data['email']
+        name = user_data['name']
+        provider = 'google'
+
+        return register_social_user(provider=provider, user_id=used_id, email=email, name=name)

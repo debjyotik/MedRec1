@@ -9,13 +9,13 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, GenericAPIView
 
 from rest_framework.filters import SearchFilter, OrderingFilter
 
 from patient.models import Patient
 
-from .serializer import PatientSerializer, RegisterUserSerializer
+from .serializer import PatientSerializer, RegisterUserSerializer, GoogleSocialAuthSerializer
 
 
 #Display all patient records or create a new patient record
@@ -60,7 +60,17 @@ def api_patient_list(request):
         serializer = PatientSerializer(patient, many=True)
         return Response(serializer.data)
 
-#view all page wise
+#Google Auth
+class GoogleSocialAuthView(GenericAPIView):
+    serializer_class = GoogleSocialAuthSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = ((serializer.validated_data)['auth_token'])
+        return Response(data, status=status.HTTP_200_OK)
+
+#search-view all page wise
 class api_patient_list_page(ListAPIView):
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
